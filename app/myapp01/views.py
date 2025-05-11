@@ -14,3 +14,4 @@ def hello_world2(request):
 class HelloWorldView(View):
     def get(self, request):
         return render(request, 'hello_world.html', {'message': "Hello, World! I'm from class-based view!"})
+    
