@@ -212,3 +212,39 @@ A Basic Start with Learning Django
     python manage.py createsuperuser
     ```
 2. Access the admin interface at `http://localhost:8000/admin/`.
+
+## Adding MySQL Database
+1. Install MySQL client:
+    ```bash
+    pipenv install mysqlclient
+    ```
+2. Update the `DATABASES` setting in `settings.py`:
+    ```python
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'mydatabase',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'USER': 'root',
+            'PASSWORD': 'password',
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'", # MySQL specific option - to make sure validation is strict
+            }
+        }
+    }
+    ```
+3. Create a new database in MySQL:
+    ```sql
+    CREATE DATABASE mydatabase;
+    ```
+4. Apply migrations:
+    ```bash
+    python manage.py migrate
+    ```
+5. Apply migrations:
+    ```bash
+    python manage.py makemigrations 
+    python manage.py migrate 
+    ```
+
