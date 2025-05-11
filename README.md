@@ -248,3 +248,12 @@ A Basic Start with Learning Django
     python manage.py migrate 
     ```
 
+## NOTE 11: Working with Templates and Static Files
+-   Templates are used to define the HTML structure of the web pages.
+-   Templates can be created in the `templates/` directory of the app.
+-   Static files are used to define the CSS, JavaScript, and image files used in the web application.
+-   Static files can be created in the `static/` directory of the app.
+-   Static files can be served using the `staticfiles` app provided by Django.
+-   Static files can be referenced in templates using the `{% static %}` template tag.
+
+

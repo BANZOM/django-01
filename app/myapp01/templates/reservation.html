@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Reservation</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Important for width 100% */
+        }
+        .form-group .errorlist { /* Django's default class for field errors */
+            list-style-type: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+            color: #d9534f; /* Red for errors */
+            font-size: 0.9em;
+        }
+        .form-group .errorlist li {
+            margin-bottom: 3px;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .btn:hover {
+            background-color: #4cae4c;
+        }
+        /* Styles for non-field errors */
+        .non-field-errors {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 15px;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Make a Reservation</h1>
+
+        {% if success == True %}
+            <div class="alert alert-success" role="alert">
+                Reservation submitted successfully! We will contact you shortly.
+            </div>
+        {% endif %}
+
+        {% comment %} 
+        Display non-field errors (errors that don't belong to a specific field)
+        This is useful for errors like "Passwords don't match" or other custom form validation.
+        {% endcomment %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>Error:</strong>
+                <ul class="non-field-errors">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        {% comment %}
+        If success is explicitly False, it means form submission failed validation.
+        We can show a generic message, but field-specific errors from the form object are usually more helpful.
+        The `form.non_field_errors` and `form.field.errors` will cover this.
+        So, this specific block might be redundant if you rely on form error display.
+        {% endcomment %}
+        {% if success == False and not form.non_field_errors and not form.errors %} 
+            <div class="alert alert-danger" role="alert">
+                There was an issue with your submission. Please check the form below for errors.
+            </div>
+        {% endif %}
+
+        <form method="post" action="">
+            {% csrf_token %}
+
+            {% comment %}
+            You can render the form in a few ways:
+            1. {{ form.as_p }} - Renders each field wrapped in <p> tags.
+            2. {{ form.as_ul }} - Renders each field as an <li> in a <ul>.
+            3. {{ form.as_table }} - Renders each field as a <tr> in a <table>.
+            4. Manual rendering (looping through fields) for more control.
+
+            Using {{ form.as_p }} is quick and easy.
+            For more control over styling and layout, manual rendering is better.
+            Let's show both options.
+            {% endcomment %}
+
+            {# Option 1: Simple rendering (uncomment to use) #}
+            {# {{ form.as_p }} #}
+
+            {# Option 2: Manual rendering for better control #}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small style="color: grey; display: block; margin-top: 3px;">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="form-group">
+                <button type="submit" class="btn">Submit Reservation</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
